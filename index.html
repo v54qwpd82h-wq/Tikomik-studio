@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>G.L Tikomik Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#03070F;--deep:#060D1A;--layer:#0A1628;--panel:#0D1E35;--card:#112240;
+  --border:rgba(0,180,255,0.15);--accent:#00B4FF;--accent2:#7B2FFF;
+  --gold:#FFB300;--red:#FF3860;--green:#00D97E;--pink:#FF6EB4;
+  --white:#F0F6FF;--dim:rgba(240,246,255,0.5);--dimmer:rgba(240,246,255,0.2);
+  --glow:0 0 30px rgba(0,180,255,0.25);--glow2:0 0 40px rgba(123,47,255,0.3);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Rajdhani',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--deep)}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
+
+/* ── LANG MODAL ── */
+#langModal{position:fixed;inset:0;z-index:9999;background:radial-gradient(ellipse at center,#0A1628 0%,#03070F 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:48px}
+.lm-logo{font-family:'Orbitron',sans-serif;font-size:2.2rem;font-weight:900;background:linear-gradient(90deg,#00B4FF,#7B2FFF);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.lm-sub{font-size:1rem;color:var(--dim);letter-spacing:.08em;text-transform:uppercase}
+.lm-btns{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+.lm-btn{padding:14px 40px;border-radius:4px;background:transparent;border:1px solid var(--accent);color:var(--white);font-family:'Orbitron',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer;transition:all .3s;letter-spacing:.08em}
+.lm-btn:hover{border-color:#00B4FF;box-shadow:0 0 20px rgba(0,180,255,0.4);transform:translateY(-2px)}
+.lm-scan{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.07) 2px,rgba(0,0,0,.07) 4px)}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 5%;height:64px;background:rgba(3,7,15,0.92);border-bottom:1px solid var(--border);backdrop-filter:blur(20px)}
+.nav-logo{font-family:'Orbitron',sans-serif;font-size:1.1rem;font-weight:900;color:var(--accent);letter-spacing:.06em;cursor:pointer;text-shadow:0 0 20px rgba(0,180,255,0.5)}
+.nav-logo span{color:var(--accent2)}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{color:var(--dim);text-decoration:none;font-size:.82rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;transition:color .25s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;background:var(--accent);transform:scaleX(0);transition:transform .25s}
+.nav-links a:hover{color:var(--white)}.nav-links a:hover::after{transform:scaleX(1)}
+.nav-cta{padding:9px 24px;border-radius:3px;border:none;background:linear-gradient(90deg,#00B4FF,#7B2FFF);color:#fff;font-family:'Orbitron',sans-serif;font-size:.75rem;font-weight:700;cursor:pointer;letter-spacing:.08em;transition:all .3s;box-shadow:0 4px 20px rgba(0,180,255,0.3)}
+.nav-cta:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,180,255,0.5)}
+.burger{display:none;flex-direction:column;gap:5px;cursor:pointer}.burger span{width:22px;height:1.5px;background:var(--white)}
+
+/* ── HERO ── */
+#hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:80px 5% 60px}
+.hero-nebula{position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 20% 50%,rgba(0,180,255,0.08) 0%,transparent 60%),radial-gradient(ellipse 60% 60% at 80% 30%,rgba(123,47,255,0.1) 0%,transparent 60%)}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,180,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,180,255,0.04) 1px,transparent 1px);background-size:80px 80px;animation:gridScroll 30s linear infinite}
+@keyframes gridScroll{from{background-position:0 0}to{background-position:80px 80px}}
+.hero-inner{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;max-width:1200px;width:100%}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border:1px solid rgba(0,180,255,0.3);border-radius:2px;background:rgba(0,180,255,0.07);font-size:.72rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:24px;animation:fadeIn .8s ease both}
+.hero-tag::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);animation:blink 1.5s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+h1{font-family:'Orbitron',sans-serif;font-size:clamp(2rem,4.5vw,3.8rem);font-weight:900;line-height:1.1;margin-bottom:20px;animation:slideUp .9s ease .2s both}
+h1 em{display:block;font-style:normal;background:linear-gradient(90deg,#00B4FF 0%,#7B2FFF 60%,#00B4FF 100%);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 4s linear infinite}
+@keyframes shimmer{from{background-position:0%}to{background-position:200%}}
+@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.hero-p{font-size:1rem;color:var(--dim);line-height:1.7;max-width:480px;margin-bottom:36px;animation:slideUp .9s ease .4s both}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;animation:slideUp .9s ease .6s both}
+.btn-cta{padding:13px 32px;border-radius:3px;border:none;background:linear-gradient(90deg,#00B4FF,#7B2FFF);color:#fff;font-family:'Orbitron',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.08em;transition:all .3s;box-shadow:0 6px 25px rgba(0,180,255,0.35)}
+.btn-cta:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,180,255,0.55)}
+.btn-ghost{padding:13px 32px;border-radius:3px;border:1px solid rgba(0,180,255,0.4);background:transparent;color:var(--white);font-family:'Orbitron',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.08em;transition:all .3s}
+.btn-ghost:hover{border-color:var(--accent);box-shadow:0 0 20px rgba(0,180,255,0.2)}
+
+/* ── HERO SCENE ── */
+.hero-scene{animation:fadeIn 1.2s ease .5s both}
+.scene-frame{width:100%;aspect-ratio:4/3;background:linear-gradient(160deg,#0A1628 0%,#060D1A 100%);border:1px solid var(--border);border-radius:8px;position:relative;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,0.7),0 0 0 1px rgba(0,180,255,0.1)}
+.scene-bg-sky{position:absolute;top:0;left:0;right:0;bottom:45%;background:linear-gradient(180deg,#030B1A 0%,#071628 100%)}
+.scene-bg-floor{position:absolute;top:55%;left:0;right:0;bottom:0;background:linear-gradient(0deg,#030A14 0%,#071020 100%);overflow:hidden}
+.scene-bg-floor::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(0,180,255,0.08) 1px,transparent 1px),linear-gradient(90deg,rgba(0,180,255,0.08) 1px,transparent 1px);background-size:30px 30px;transform:perspective(200px) rotateX(45deg);transform-origin:bottom}
+.scene-horizon{position:absolute;top:55%;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),var(--accent2),transparent);box-shadow:0 0 15px rgba(0,180,255,0.6)}
+.scene-amb{position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(123,47,255,0.12) 0%,transparent 70%);pointer-events:none}
+.scene-hero-char{position:absolute;bottom:38%;left:50%;transform:translateX(-50%);animation:charBob 3s ease-in-out infinite;filter:drop-shadow(0 20px 40px rgba(0,180,255,0.3))}
+@keyframes charBob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-10px)}}
+.scene-bubble{position:absolute;top:10%;right:6%;background:rgba(240,246,255,0.96);color:#060D1A;border-radius:14px 14px 4px 14px;padding:10px 14px;font-size:.72rem;font-weight:700;max-width:145px;line-height:1.4;box-shadow:0 8px 24px rgba(0,0,0,0.4)}
+.scene-bubble::after{content:'';position:absolute;bottom:-8px;right:12px;border:8px solid transparent;border-top-color:rgba(240,246,255,0.96);border-bottom:none}
+.scene-hud{position:absolute;top:8px;left:8px;display:flex;flex-direction:column;gap:4px}
+.hud-bar{display:flex;align-items:center;gap:6px;background:rgba(0,0,0,0.6);border:1px solid rgba(0,180,255,0.2);border-radius:2px;padding:4px 8px;font-size:.62rem;font-weight:700;color:var(--accent);letter-spacing:.08em}
+.hud-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:blink 1s infinite}
+.sob-bar{position:absolute;bottom:0;left:0;right:0;height:36px;background:rgba(3,7,15,0.85);border-top:1px solid var(--border);display:flex;align-items:center;padding:0 12px;gap:8px}
+.sob-btn{padding:4px 12px;border-radius:2px;border:1px solid rgba(0,180,255,0.3);background:transparent;color:var(--accent);font-family:'Rajdhani',sans-serif;font-size:.72rem;font-weight:700;cursor:pointer;transition:all .2s}
+.sob-btn:hover{background:rgba(0,180,255,0.1)}.sob-btn.active{background:linear-gradient(90deg,#00B4FF,#7B2FFF);border-color:transparent;color:#fff}
+
+/* ── SECTION HEADER ── */
+.s-header{text-align:center;margin-bottom:48px}
+.s-label{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+.s-title{font-family:'Orbitron',sans-serif;font-size:clamp(1.6rem,3vw,2.4rem);font-weight:900;margin-bottom:12px}
+.s-sub{font-size:.95rem;color:var(--dim);max-width:500px;margin:0 auto}
+
+/* ── STUDIO ── */
+#studio{padding:100px 3%;background:var(--deep)}
+.studio-shell{max-width:1340px;margin:0 auto;background:var(--layer);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,0.7),var(--glow)}
+.studio-titlebar{background:var(--deep);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:10px 20px}
+.tb-dots{display:flex;gap:7px}.tb-dot{width:11px;height:11px;border-radius:50%}.tb-r{background:#FF3860}.tb-y{background:#FFB300}.tb-g{background:#00D97E}
+.tb-title{font-family:'Orbitron',sans-serif;font-size:.72rem;font-weight:700;color:var(--dim);letter-spacing:.12em;text-transform:uppercase}
+.tb-status{display:flex;align-items:center;gap:6px;font-size:.68rem;font-weight:700;color:var(--accent);letter-spacing:.1em}
+.tb-online{width:6px;height:6px;border-radius:50%;background:#00D97E;animation:blink .8s infinite}
+.studio-layout{display:grid;grid-template-columns:210px 1fr 220px;min-height:580px}
+.sp-section-title{font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:10px}
+
+/* ── LEFT PANEL ── */
+.sp-left{background:var(--panel);border-right:1px solid var(--border);padding:16px;display:flex;flex-direction:column;gap:18px;overflow-y:auto}
+.char-list{display:flex;flex-direction:column;gap:5px}
+.char-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:4px;border:1px solid transparent;background:rgba(255,255,255,0.03);cursor:pointer;transition:all .2s}
+.char-item:hover{background:rgba(0,180,255,0.06);border-color:rgba(0,180,255,0.2)}
+.char-item.active{background:rgba(0,180,255,0.1);border-color:rgba(0,180,255,0.4)}
+.char-avatar{width:38px;height:38px;border-radius:50%;overflow:hidden;flex-shrink:0;border:1.5px solid rgba(0,180,255,0.3);background:var(--layer);display:flex;align-items:center;justify-content:center}
+.char-avatar svg{width:32px;height:32px}
+.char-name{font-size:.78rem;font-weight:700;color:var(--white);line-height:1.1}
+.char-type{font-size:.65rem;color:var(--dim)}
+.scene-mini-list{display:flex;flex-direction:column;gap:5px}
+.scene-mini{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:4px;border:1px solid transparent;background:rgba(255,255,255,0.03);cursor:pointer;transition:all .2s;font-size:.78rem;font-weight:600}
+.scene-mini:hover{background:rgba(123,47,255,0.08);border-color:rgba(123,47,255,0.2)}
+.scene-mini.active{background:rgba(123,47,255,0.12);border-color:rgba(123,47,255,0.35)}
+.scene-thumb{width:28px;height:20px;border-radius:2px;flex-shrink:0}
+
+/* ── CENTER CANVAS ── */
+.sp-canvas{position:relative;overflow:hidden;background:#030710;display:flex;flex-direction:column}
+.canvas-vp{flex:1;position:relative;display:flex;align-items:center;justify-content:center;min-height:420px;overflow:hidden}
+.cv-sky{position:absolute;top:0;left:0;right:0;bottom:45%;background:linear-gradient(180deg,#030B1A 0%,#071628 100%);transition:background .5s}
+.cv-wall{position:absolute;top:0;left:0;right:0;height:55%;overflow:hidden}
+.cv-wall::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),var(--accent2),transparent);box-shadow:0 0 15px rgba(0,180,255,0.5)}
+.cv-floor{position:absolute;top:55%;left:0;right:0;bottom:0;background:linear-gradient(0deg,#030A14 0%,#071020 100%);overflow:hidden}
+.cv-floor::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(0,180,255,0.08) 1px,transparent 1px),linear-gradient(90deg,rgba(0,180,255,0.08) 1px,transparent 1px);background-size:40px 40px;transform:perspective(400px) rotateX(60deg);transform-origin:bottom center}
+/* Halftone comic overlay */
+.cv-comic-dots{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(circle,rgba(0,180,255,0.04) 1px,transparent 1px);background-size:18px 18px;opacity:0.7}
+.cv-amb{position:absolute;top:35%;left:50%;transform:translate(-50%,-50%);width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(123,47,255,0.1) 0%,transparent 70%);pointer-events:none}
+.cv-char{position:relative;z-index:5;animation:cvBob 3s ease-in-out infinite;filter:drop-shadow(0 24px 48px rgba(0,180,255,0.2)) drop-shadow(0 0 20px rgba(123,47,255,0.15))}
+@keyframes cvBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.cv-char.is-speaking{filter:drop-shadow(0 24px 48px rgba(0,180,255,0.3)) drop-shadow(0 0 30px rgba(0,180,255,0.35))}
+/* Wave anim on speaking */
+.cv-char.is-speaking::before{content:'';position:absolute;inset:-20px;border-radius:50%;border:2px solid rgba(0,180,255,0.3);animation:speakPulse .5s ease-in-out infinite alternate}
+@keyframes speakPulse{from{transform:scale(0.95);opacity:0.5}to{transform:scale(1.05);opacity:1}}
+
+/* Speech bubble — UI only, not on video */
+.cv-speech-ui{position:absolute;top:6%;right:4%;z-index:20;background:rgba(240,246,255,0.96);color:#040C1C;border-radius:14px 14px 4px 14px;padding:11px 14px;font-size:.74rem;font-weight:700;max-width:160px;line-height:1.4;box-shadow:0 10px 30px rgba(0,0,0,0.5);transition:all .3s;border:none;min-height:40px}
+.cv-speech-ui::after{content:'';position:absolute;bottom:-9px;right:12px;border:9px solid transparent;border-top-color:rgba(240,246,255,0.96);border-bottom:none}
+.speech-placeholder{color:rgba(4,12,28,0.4);font-style:italic}
+.cv-hud{position:absolute;top:8px;left:8px;display:flex;flex-direction:column;gap:4px;z-index:10}
+.canvas-toolbar{background:var(--deep);border-top:1px solid var(--border);display:flex;align-items:center;gap:8px;padding:10px 14px;flex-wrap:wrap}
+.ct-btn{display:flex;align-items:center;gap:5px;padding:7px 14px;border-radius:3px;border:1px solid rgba(0,180,255,0.2);background:rgba(0,180,255,0.04);color:var(--white);font-family:'Rajdhani',sans-serif;font-size:.78rem;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:.05em}
+.ct-btn:hover{background:rgba(0,180,255,0.1);border-color:rgba(0,180,255,0.4)}
+.ct-btn.primary{background:linear-gradient(90deg,#00B4FF,#7B2FFF);border-color:transparent;box-shadow:0 4px 16px rgba(0,180,255,0.3)}
+.ct-btn.primary:hover{transform:scale(1.04);box-shadow:0 6px 24px rgba(0,180,255,0.5)}
+.ct-btn.danger{background:rgba(255,56,96,0.12);border-color:rgba(255,56,96,0.3);color:#FF3860}
+.ct-btn.danger:hover{background:rgba(255,56,96,0.22)}
+.gen-bar{background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:4px;overflow:hidden;height:6px;flex:1;min-width:60px}
+.gen-fill{height:100%;width:0%;background:linear-gradient(90deg,#00B4FF,#7B2FFF);transition:width .3s}
+
+/* ── RIGHT PANEL ── */
+.sp-right{background:var(--panel);border-left:1px solid var(--border);padding:14px;display:flex;flex-direction:column;gap:14px;overflow-y:auto}
+.textarea-styled{width:100%;background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:4px;padding:10px 12px;color:var(--white);font-family:'Rajdhani',sans-serif;font-size:.85rem;line-height:1.5;resize:none;outline:none;transition:border-color .2s}
+.textarea-styled:focus{border-color:var(--accent);box-shadow:0 0 8px rgba(0,180,255,0.15)}
+.lang-toggle{display:flex;gap:5px}
+.lt-btn{flex:1;padding:7px 4px;text-align:center;border-radius:3px;border:1px solid rgba(0,180,255,0.2);background:transparent;color:var(--dim);font-family:'Rajdhani',sans-serif;font-size:.75rem;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.04em}
+.lt-btn.active{background:rgba(0,180,255,0.15);border-color:var(--accent);color:var(--accent)}
+
+/* ── VOICE SYSTEM ── */
+.voice-gender-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px}
+.vg-btn{padding:8px 4px;border-radius:4px;border:1px solid var(--border);background:rgba(0,0,0,0.2);color:var(--dim);font-family:'Rajdhani',sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;transition:all .2s;text-align:center;letter-spacing:.04em;display:flex;flex-direction:column;align-items:center;gap:2px}
+.vg-btn .vg-icon{font-size:1.1rem;line-height:1}
+.vg-btn.active-male{background:rgba(0,180,255,0.15);border-color:var(--accent);color:var(--accent)}
+.vg-btn.active-female{background:rgba(255,110,180,0.15);border-color:#FF6EB4;color:#FF6EB4}
+.vg-btn.active-robot{background:rgba(0,229,255,0.12);border-color:#00E5FF;color:#00E5FF}
+.vg-btn:hover{border-color:rgba(0,180,255,0.4);background:rgba(0,180,255,0.08)}
+
+/* Voice waveform display */
+.voice-wave-display{background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:4px;padding:10px 12px;display:flex;align-items:center;gap:6px;min-height:36px;overflow:hidden}
+.vwd-label{font-size:.72rem;font-weight:700;color:var(--dim);flex-shrink:0;letter-spacing:.06em}
+.vwd-wave{display:flex;gap:2px;align-items:center;flex:1}
+.vwd-wave span{width:3px;border-radius:2px;background:var(--accent);opacity:.4;transition:height .1s,opacity .1s}
+.vwd-wave.playing span{opacity:1;animation:waveBar .4s ease-in-out infinite alternate}
+.vwd-wave.playing span:nth-child(2){animation-delay:.1s}
+.vwd-wave.playing span:nth-child(3){animation-delay:.2s}
+.vwd-wave.playing span:nth-child(4){animation-delay:.05s}
+.vwd-wave.playing span:nth-child(5){animation-delay:.15s}
+.vwd-wave.playing span:nth-child(6){animation-delay:.25s}
+.vwd-wave.playing span:nth-child(7){animation-delay:.08s}
+.vwd-wave.playing span:nth-child(8){animation-delay:.18s}
+@keyframes waveBar{from{height:4px}to{height:18px}}
+
+.speak-btn{width:100%;padding:12px;border-radius:4px;border:none;background:linear-gradient(90deg,#00B4FF,#7B2FFF);color:#fff;font-family:'Orbitron',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.08em;transition:all .3s;box-shadow:0 4px 16px rgba(0,180,255,0.3);display:flex;align-items:center;justify-content:center;gap:8px}
+.speak-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,180,255,0.5)}
+.speak-btn:active{transform:scale(.97)}
+.stop-btn{width:100%;padding:9px;border-radius:4px;border:1px solid rgba(255,56,96,0.35);background:rgba(255,56,96,0.08);color:#FF3860;font-family:'Orbitron',sans-serif;font-size:.72rem;font-weight:700;cursor:pointer;letter-spacing:.08em;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px}
+.stop-btn:hover{background:rgba(255,56,96,0.18)}
+
+/* ── FEATURES ── */
+#features{padding:100px 5%;background:var(--ink)}
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;margin-top:60px;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.feat-cell{background:var(--layer);padding:36px 32px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);transition:background .3s;position:relative;overflow:hidden}
+.feat-cell::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:0;transition:opacity .3s}
+.feat-cell:hover{background:var(--panel)}.feat-cell:hover::before{opacity:1}
+.feat-num{font-family:'Orbitron',sans-serif;font-size:.65rem;font-weight:700;color:var(--accent);letter-spacing:.15em;margin-bottom:16px;opacity:.6}
+.feat-icon-wrap{width:48px;height:48px;border-radius:6px;background:linear-gradient(135deg,rgba(0,180,255,0.15),rgba(123,47,255,0.15));border:1px solid rgba(0,180,255,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.feat-title{font-family:'Orbitron',sans-serif;font-size:.9rem;font-weight:700;margin-bottom:10px}
+.feat-desc{font-size:.88rem;color:var(--dim);line-height:1.65}
+
+/* ── CHARACTERS GALLERY ── */
+#characters{padding:100px 5%;background:var(--deep)}
+.char-gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:12px;margin-top:50px}
+.char-gallery-card{background:var(--layer);border:1px solid var(--border);border-radius:8px;overflow:hidden;cursor:pointer;transition:all .3s;position:relative}
+.char-gallery-card:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:0 20px 50px rgba(0,0,0,0.5),var(--glow)}
+.cgc-preview{height:150px;display:flex;align-items:flex-end;justify-content:center;position:relative;overflow:hidden;padding-top:10px}
+.cgc-bg{position:absolute;inset:0;background:linear-gradient(180deg,#060D1A 0%,#0A1628 100%)}
+.cgc-glow{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:120px;height:50px;border-radius:50%;filter:blur(18px)}
+.cgc-char{position:relative;z-index:1;filter:drop-shadow(0 10px 20px rgba(0,0,0,0.5))}
+.cgc-info{padding:10px 12px;border-top:1px solid var(--border)}
+.cgc-name{font-family:'Orbitron',sans-serif;font-size:.68rem;font-weight:700;margin-bottom:3px}
+.cgc-type{font-size:.63rem;color:var(--dim)}
+.cgc-badge{display:inline-block;margin-top:5px;padding:2px 7px;border-radius:2px;font-size:.58rem;font-weight:700;letter-spacing:.08em;background:rgba(0,180,255,0.12);color:var(--accent);border:1px solid rgba(0,180,255,0.2)}
+
+/* ── PLANS ── */
+#plans{padding:100px 5%;background:var(--ink)}
+.plans-row{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-top:60px}
+.plan-box{width:340px;background:var(--layer);border:1px solid var(--border);border-radius:8px;padding:40px 36px;position:relative;transition:all .35s}
+.plan-box.featured{border-color:var(--accent);box-shadow:0 0 0 1px rgba(0,180,255,0.2),0 30px 80px rgba(0,0,0,0.5),var(--glow)}
+.plan-hot{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,#00B4FF,#7B2FFF);padding:4px 20px;border-radius:2px;font-family:'Orbitron',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.12em;white-space:nowrap}
+.plan-tier{font-family:'Orbitron',sans-serif;font-size:.72rem;font-weight:700;color:var(--dim);letter-spacing:.14em;text-transform:uppercase;margin-bottom:20px}
+.plan-price{font-family:'Orbitron',sans-serif;font-size:3.2rem;font-weight:900;line-height:1;margin-bottom:4px}
+.plan-price sup{font-size:1.2rem;vertical-align:top;margin-top:10px;display:inline-block}
+.plan-htg{font-size:.8rem;color:var(--dim);margin-bottom:28px}
+.plan-divider{height:1px;background:var(--border);margin-bottom:20px}
+.plan-feats{list-style:none;display:flex;flex-direction:column;gap:11px;margin-bottom:32px}
+.plan-feats li{display:flex;align-items:center;gap:10px;font-size:.88rem;color:var(--dim)}
+.plan-feats li::before{content:'';width:16px;height:16px;border-radius:2px;flex-shrink:0;background:rgba(0,180,255,0.12);border:1px solid rgba(0,180,255,0.3);background-image:url("data:image/svg+xml,%3Csvg width='10' height='8' viewBox='0 0 10 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 4L3.5 6.5L9 1' stroke='%2300B4FF' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center}
+.plan-btn{width:100%;padding:13px;border-radius:3px;border:none;font-family:'Orbitron',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;letter-spacing:.08em;transition:all .3s}
+.plan-btn-line{background:transparent;border:1px solid rgba(0,180,255,0.4);color:var(--white)}
+.plan-btn-line:hover{border-color:var(--accent);box-shadow:0 0 15px rgba(0,180,255,0.2)}
+.plan-btn-fill{background:linear-gradient(90deg,#00B4FF,#7B2FFF);color:#fff;box-shadow:0 6px 24px rgba(0,180,255,0.3)}
+.plan-btn-fill:hover{transform:translateY(-2px);box-shadow:0 10px 35px rgba(0,180,255,0.5)}
+
+/* ── PAYMENT ── */
+#payment{padding:100px 5%;background:var(--deep)}
+.pay-methods{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:50px}
+.pay-method{background:var(--layer);border:1px solid var(--border);border-radius:6px;padding:24px 20px;text-align:center;cursor:pointer;transition:all .3s}
+.pay-method:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:var(--glow)}
+.pm-logo{margin-bottom:12px}.pm-logo svg{width:40px;height:40px}
+.pm-name{font-family:'Orbitron',sans-serif;font-size:.8rem;font-weight:700;margin-bottom:4px}
+.pm-detail{font-size:.75rem;color:var(--dim);word-break:break-all}
+.wa-block{margin-top:48px;background:linear-gradient(135deg,rgba(0,211,80,0.06),rgba(0,180,255,0.04));border:1px solid rgba(0,211,80,0.2);border-radius:8px;padding:40px;text-align:center}
+.wa-block h3{font-family:'Orbitron',sans-serif;font-size:1.3rem;font-weight:900;margin-bottom:10px}
+.wa-block p{color:var(--dim);font-size:.9rem;margin-bottom:28px;line-height:1.6}
+.wa-btn{display:inline-flex;align-items:center;gap:10px;padding:13px 36px;border-radius:3px;border:none;background:#25D366;color:#fff;font-family:'Orbitron',sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;letter-spacing:.08em;transition:all .3s;text-decoration:none;box-shadow:0 6px 24px rgba(37,211,102,0.3)}
+.wa-btn:hover{transform:translateY(-3px);box-shadow:0 10px 35px rgba(37,211,102,0.5)}
+
+/* ── FOOTER ── */
+footer{background:var(--deep);border-top:1px solid var(--border);padding:60px 5% 40px}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+.ft-brand .logo{font-family:'Orbitron',sans-serif;font-size:1.2rem;font-weight:900;color:var(--accent);margin-bottom:14px;text-shadow:0 0 20px rgba(0,180,255,0.3)}
+.ft-brand p{font-size:.85rem;color:var(--dim);line-height:1.7}
+.ft-col h5{font-family:'Orbitron',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:16px}
+.ft-col ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+.ft-col ul li a{color:var(--dimmer);text-decoration:none;font-size:.85rem;transition:color .2s}
+.ft-col ul li a:hover{color:var(--white)}
+.footer-bottom{border-top:1px solid var(--border);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.footer-bottom p{font-size:.78rem;color:var(--dimmer)}
+
+/* ── UTILS ── */
+.mob-menu{display:none;position:fixed;inset:0;z-index:98;background:rgba(3,7,15,0.98);backdrop-filter:blur(20px);flex-direction:column;align-items:center;justify-content:center;gap:28px}
+.mob-menu.open{display:flex}.mob-close{position:absolute;top:20px;right:22px;font-size:1.5rem;cursor:pointer;color:var(--dim)}
+.mob-menu a{font-family:'Orbitron',sans-serif;font-size:1.2rem;font-weight:700;color:var(--white);text-decoration:none;letter-spacing:.08em}
+.toast{position:fixed;bottom:28px;right:28px;z-index:9999;background:linear-gradient(90deg,#00B4FF,#7B2FFF);color:#fff;padding:12px 22px;border-radius:4px;font-family:'Rajdhani',sans-serif;font-size:.9rem;font-weight:700;box-shadow:0 8px 30px rgba(0,180,255,0.4);opacity:0;transform:translateY(12px);transition:all .35s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+.reveal{opacity:0;transform:translateY(24px);transition:all .65s ease}.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:960px){
+  .nav-links,.nav-cta-desktop{display:none}.burger{display:flex}
+  .hero-inner{grid-template-columns:1fr;text-align:center}.hero-p{margin:0 auto 36px}.hero-btns{justify-content:center}.hero-scene{max-width:460px;margin:0 auto}
+  .studio-layout{grid-template-columns:1fr}.sp-left,.sp-right{border-right:none;border-left:none;border-bottom:1px solid var(--border)}
+  .footer-top{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){.footer-top{grid-template-columns:1fr}.plan-box{width:100%}}
+</style>
+</head>
+<body>
+
+<!-- LANG MODAL -->
+<div id="langModal">
+  <div class="lm-scan"></div>
+  <div class="lm-logo">G.L TIKOMIK STUDIO</div>
+  <div class="lm-sub">Chwazi lang ou · Choisissez · Choose</div>
+  <div class="lm-btns">
+    <button class="lm-btn" onclick="chooseLang('ht')">🇭🇹 &nbsp;KREYÒL</button>
+    <button class="lm-btn" onclick="chooseLang('fr')">🇫🇷 &nbsp;FRANÇAIS</button>
+    <button class="lm-btn" onclick="chooseLang('en')">🇺🇸 &nbsp;ENGLISH</button>
+  </div>
+</div>
+
+<!-- MOBILE MENU -->
+<div class="mob-menu" id="mobMenu">
+  <span class="mob-close" onclick="closeMob()">✕</span>
+  <a href="#studio" onclick="closeMob()">Studio</a>
+  <a href="#features" onclick="closeMob()">Fonksyon</a>
+  <a href="#characters" onclick="closeMob()">Pèsonaj</a>
+  <a href="#plans" onclick="closeMob()">Plans</a>
+  <a href="#payment" onclick="closeMob()">Pèman</a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" onclick="goto('#hero')">G.L <span>TIKOMIK</span> STUDIO</div>
+  <ul class="nav-links">
+    <li><a href="#studio">Studio</a></li>
+    <li><a href="#features">Fonksyon</a></li>
+    <li><a href="#characters">Pèsonaj</a></li>
+    <li><a href="#plans">Plans</a></li>
+    <li><a href="#payment">Pèman</a></li>
+  </ul>
+  <div style="display:flex;gap:10px;align-items:center">
+    <button class="nav-cta nav-cta-desktop" onclick="goto('#studio')">KREYE TIKOMIK</button>
+    <div class="burger" onclick="document.getElementById('mobMenu').classList.add('open')"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-nebula"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-tag" id="htag">✦ PLATFÒM AI #1 POU TIKOMIK ANIMÉES</div>
+      <h1 id="htitle">KREYE<br><em id="htitle2">TIKOMIK ANIMÉES</em><br>AVÈK AI</h1>
+      <p class="hero-p" id="hsub">Chwazi yon pèsonaj 3D, ekri tèks ou, epi pèsonaj la pale natirèlman an kreyòl, fransè oubyen anglè — tankou Plotagon.</p>
+      <div class="hero-btns">
+        <button class="btn-cta" onclick="goto('#studio')">▶ KÒMANSE GRATIS</button>
+        <button class="btn-ghost" onclick="goto('#features')">DEKOUVRI FONKSYON →</button>
+      </div>
+    </div>
+    <div class="hero-scene">
+      <div class="scene-frame">
+        <div class="scene-bg-sky"></div>
+        <div class="cv-wall"></div>
+        <div class="scene-bg-floor"></div>
+        <div class="cv-comic-dots"></div>
+        <div class="scene-amb"></div>
+        <div class="scene-hero-char" id="heroPreviewChar"></div>
+        <div class="scene-bubble">Bonjou! Mwen se yon Tikomik 3D AI! 🎬</div>
+        <div class="scene-hud">
+          <div class="hud-bar"><div class="hud-dot"></div>AI ACTIVE</div>
+          <div class="hud-bar" style="color:#FFB300"><div class="hud-dot" style="background:#FFB300;animation-delay:.3s"></div>VWA ON</div>
+        </div>
+        <div class="sob-bar">
+          <button class="sob-btn active">▶ JWEN</button>
+          <button class="sob-btn" onclick="showToast('Chanje pèsonaj — Studio!')">🔄 CHANJE</button>
+          <button class="sob-btn" onclick="goto('#studio')">🎬 STUDIO</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STUDIO -->
+<section id="studio">
+  <div class="s-header">
+    <span class="s-label">✦ STUDIO AI</span>
+    <h2 class="s-title" id="sTitle">EDITÈ TIKOMIK PWOFESYONÈL</h2>
+    <p class="s-sub" id="sSub">Chwazi pèsonaj, scèn, ekri tèks — pèsonaj pale tout sèl. Sans tèks sou vidéo.</p>
+  </div>
+
+  <div class="studio-shell reveal">
+    <div class="studio-titlebar">
+      <div class="tb-dots"><div class="tb-dot tb-r"></div><div class="tb-dot tb-y"></div><div class="tb-dot tb-g"></div></div>
+      <div class="tb-title">G.L TIKOMIK STUDIO — EDITÈ AI v2.0</div>
+      <div class="tb-status"><div class="tb-online"></div>ONLINE</div>
+    </div>
+
+    <div class="studio-layout">
+      <!-- LEFT -->
+      <div class="sp-left">
+        <div>
+          <div class="sp-section-title">PÈSONAJ 3D</div>
+          <div class="char-list" id="charList"></div>
+        </div>
+        <div>
+          <div class="sp-section-title">SCÈN</div>
+          <div class="scene-mini-list" id="sceneList"></div>
+        </div>
+      </div>
+
+      <!-- CENTER CANVAS -->
+      <div class="sp-canvas">
+        <div class="canvas-vp" id="canvasVP">
+          <div class="cv-sky" id="cvSky"></div>
+          <div class="cv-wall"></div>
+          <div class="cv-floor"></div>
+          <div class="cv-comic-dots"></div>
+          <div class="cv-amb"></div>
+          <div class="cv-char" id="cvChar"></div>
+          <!-- Speech bubble: UI only, not on video output -->
+          <div class="cv-speech-ui" id="cvSpeech">
+            <span class="speech-placeholder" id="speechPlaceholder">Ekri tèks ou...</span>
+            <span id="speechText" style="display:none"></span>
+          </div>
+          <div class="cv-hud">
+            <div class="hud-bar"><div class="hud-dot"></div>3D STUDIO</div>
+            <div class="hud-bar" id="voiceStatusBar" style="color:#FF6EB4"><div class="hud-dot" style="background:#FF6EB4;animation-delay:.5s"></div>VWA PRÈT</div>
+          </div>
+        </div>
+        <div class="canvas-toolbar">
+          <button class="ct-btn" onclick="playAnim()">
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor"><polygon points="2,1 10,6 2,11"/></svg>JWEN
+          </button>
+          <button class="ct-btn primary" onclick="generateVideo()">
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="currentColor"><path d="M6 0l1.5 4.5H12l-3.75 2.7 1.5 4.5L6 9l-3.75 2.7 1.5-4.5L0 4.5h4.5z"/></svg>JENERE VIDÉO
+          </button>
+          <button class="ct-btn" onclick="downloadDemo()">⬇ HD</button>
+          <div class="gen-bar"><div class="gen-fill" id="genFill"></div></div>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="sp-right">
+        <div>
+          <div class="sp-section-title">TÈKS POU PALE</div>
+          <textarea class="textarea-styled" id="userTxt" rows="4"
+            placeholder="Ekri sa ou vle pèsonaj ou di…"
+            oninput="updateSpeechPreview()">Bonjou! Mwen se yon pèsonaj 3D Tikomik AI. Mwen ka pale tout lang!</textarea>
+        </div>
+
+        <div>
+          <div class="sp-section-title">LANG</div>
+          <div class="lang-toggle">
+            <button class="lt-btn active" onclick="setLang(this,'ht')">KRY</button>
+            <button class="lt-btn" onclick="setLang(this,'fr')">FRA</button>
+            <button class="lt-btn" onclick="setLang(this,'en')">ENG</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="sp-section-title">JENR VWA</div>
+          <div class="voice-gender-row">
+            <button class="vg-btn active-male" id="vbMale" onclick="setVoiceGender('male',this)">
+              <span class="vg-icon">♂</span>GASON
+            </button>
+            <button class="vg-btn" id="vbFemale" onclick="setVoiceGender('female',this)">
+              <span class="vg-icon">♀</span>FANM
+            </button>
+            <button class="vg-btn" id="vbRobot" onclick="setVoiceGender('robot',this)">
+              <span class="vg-icon">🤖</span>FX
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <div class="sp-section-title">WAVEFORM</div>
+          <div class="voice-wave-display" id="voiceWave">
+            <span class="vwd-label" id="voiceLabel">GASON KRY</span>
+            <div class="vwd-wave" id="waveDisplay">
+              <span style="height:6px"></span><span style="height:12px"></span><span style="height:8px"></span>
+              <span style="height:15px"></span><span style="height:10px"></span><span style="height:7px"></span>
+              <span style="height:14px"></span><span style="height:9px"></span>
+            </div>
+          </div>
+        </div>
+
+        <button class="speak-btn" id="speakBtn" onclick="doSpeak()">
+          🎤 &nbsp;PALE / SPEAK
+        </button>
+        <button class="stop-btn" onclick="doStop()">
+          ⏹ &nbsp;KANPE / STOP
+        </button>
+
+        <div style="margin-top:4px">
+          <div class="sp-section-title">UPLOAD VWA</div>
+          <div style="border:1px dashed rgba(0,180,255,0.25);border-radius:4px;padding:12px;text-align:center;cursor:pointer;color:var(--dim);font-size:.76rem;line-height:1.5" onclick="showToast('Upload — Bientôt!')">
+            ⬆ Klike • MP3 / WAV • Max 10MB
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="s-header">
+    <span class="s-label">✦ FONKSYON</span>
+    <h2 class="s-title">TOUT ZOU TI POU KREYE</h2>
+    <p class="s-sub">Tout bagay ou bezwen pou pwodwi Tikomik animées HD pwofesyonèl.</p>
+  </div>
+  <div class="feat-grid reveal">
+    <div class="feat-cell">
+      <div class="feat-num">01</div>
+      <div class="feat-icon-wrap"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00B4FF" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
+      <div class="feat-title">VIDÉO AI 3D</div>
+      <p class="feat-desc">Pèsonaj 3D yo animée avèk mouvman reyèl — bouch synkronize ak vwa ou otomatikman, san tèks sou ekran.</p>
+    </div>
+    <div class="feat-cell">
+      <div class="feat-num">02</div>
+      <div class="feat-icon-wrap"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FF6EB4" stroke-width="2"><path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg></div>
+      <div class="feat-title">VWA FI + GASON</div>
+      <p class="feat-desc">Sistèm TTS avanse: vwa fi natirèl, vwa gason pwofon, ak Robot FX. Separe klayman nan UI a.</p>
+    </div>
+    <div class="feat-cell">
+      <div class="feat-num">03</div>
+      <div class="feat-icon-wrap"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00B4FF" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+      <div class="feat-title">3 LANGUES</div>
+      <p class="feat-desc">Kreyòl, Fransè, Anglè. Vwa adapte otomatikman selon lang chwazi a.</p>
+    </div>
+    <div class="feat-cell">
+      <div class="feat-num">04</div>
+      <div class="feat-icon-wrap"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFB300" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <div class="feat-title">BOUCH ANIMÉE</div>
+      <p class="feat-desc">Bouch pèsonaj la ouvri ak fèmen sou chak son — mimèt vwa reyèl la pandan lap pale.</p>
+    </div>
+    <div class="feat-cell">
+      <div class="feat-num">05</div>
+      <div class="feat-icon-wrap"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00B4FF" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+      <div class="feat-title">8 PÈSONAJ 3D HD</div>
+      <p class="feat-desc">Businessman, CEO fi, Gamer, Podcaster, Etudyan, Superhéros, Streamer ak Robot AI — tout an 3D reyèl.</p>
+    </div>
+    <div class="feat-cell">
+      <div class="feat-num">06</div>
+      <div class="feat-icon-wrap"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7B2FFF" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+      <div class="feat-title">EXPORT HD 1080P</div>
+      <p class="feat-desc">Telechaje vidéo an 1080p HD. Konpatib TikTok, Instagram, YouTube, Facebook — san mak dlo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CHARACTERS -->
+<section id="characters">
+  <div class="s-header">
+    <span class="s-label">✦ PÈSONAJ</span>
+    <h2 class="s-title">KOLEKSYON 3D PREMIUM</h2>
+    <p class="s-sub">Pèsonaj bèl, modèn, stylé — reyèl 3D HD ak vwa fi oubyen gason.</p>
+  </div>
+  <div class="char-gallery reveal" id="charGallery"></div>
+</section>
+
+<!-- PLANS -->
+<section id="plans">
+  <div class="s-header">
+    <span class="s-label">✦ ABÒNMAN</span>
+    <h2 class="s-title">CHWAZI PLAN OU</h2>
+    <p class="s-sub">Peye an USD oubyen HTG. Kòmanse kreye kounye a.</p>
+  </div>
+  <div class="plans-row">
+    <div class="plan-box reveal">
+      <div class="plan-tier">PLAN LIMITÉ</div>
+      <div class="plan-price"><sup>$</sup>20</div>
+      <div class="plan-htg">≈ 1 500 HTG / mwa</div>
+      <div class="plan-divider"></div>
+      <ul class="plan-feats">
+        <li>10 vidéo pa mwa</li><li>Pèsonaj debaz</li><li>Export 720p</li>
+        <li>3 scènes disponib</li><li>Vwa AI debaz</li>
+      </ul>
+      <button class="plan-btn plan-btn-line" onclick="selectPlan('Limité $20')">KÒMANSE →</button>
+    </div>
+    <div class="plan-box featured reveal">
+      <div class="plan-hot">⭐ PI POPILÈ</div>
+      <div class="plan-tier">PLAN ILLIMITÉ</div>
+      <div class="plan-price"><sup>$</sup>50</div>
+      <div class="plan-htg">≈ 5 000 HTG / mwa</div>
+      <div class="plan-divider"></div>
+      <ul class="plan-feats">
+        <li>Vidéo ILLIMITÉ</li><li>Tout 8 pèsonaj 3D premium</li><li>Export HD 1080p</li>
+        <li>Tout 6 scènes</li><li>Vwa fi + gason + Robot FX</li>
+        <li>Upload pwòp vwa ou</li><li>Sipò priyoritè WhatsApp</li>
+      </ul>
+      <button class="plan-btn plan-btn-fill" onclick="selectPlan('Illimité $50')">KÒMANSE KOUNYE A →</button>
+    </div>
+  </div>
+</section>
+
+<!-- PAYMENT -->
+<section id="payment">
+  <div class="s-header">
+    <span class="s-label">✦ PÈMAN</span>
+    <h2 class="s-title">METÒD PÈMAN</h2>
+    <p class="s-sub">Lokal oubyen entènasyonal — fasil ak rapid.</p>
+  </div>
+  <div class="pay-methods reveal">
+    <div class="pay-method" onclick="copyTxt('G-legacy@gmail.com','PayPal kopi!')">
+      <div class="pm-logo"><svg width="40" height="40" viewBox="0 0 24 24" fill="#00B4FF"><path d="M20.067 8.478c.492.315.844.825.983 1.39C22 12.24 20.77 14 18.645 14H17.1l-.6 3.6H13.6L15.5 6h3.29c.926 0 1.701.19 2.277.478zM7 6H3.5L1.5 18h3l.5-3h2.5c2.8 0 5-2 5-4.8C12.5 7.7 10.3 6 7 6zm.3 6H5.8l.7-4h1.7c1.2 0 1.8.7 1.8 1.7 0 1.3-.9 2.3-2.7 2.3z"/></svg></div>
+      <div class="pm-name">PAYPAL</div><div class="pm-detail">G-legacy@gmail.com</div>
+    </div>
+    <div class="pay-method" onclick="copyTxt('43 59 53 35','Natcash kopi!')">
+      <div class="pm-logo"><svg width="40" height="40" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="3" stroke="#7B2FFF" stroke-width="1.5"/><path d="M3 10h18" stroke="#7B2FFF" stroke-width="1.5"/><rect x="7" y="14" width="4" height="2" rx="1" fill="#7B2FFF"/></svg></div>
+      <div class="pm-name">NATCASH</div><div class="pm-detail">43 59 53 35</div>
+    </div>
+    <div class="pay-method" onclick="showToast('Visa — Bientôt!')">
+      <div class="pm-logo"><svg width="40" height="40" viewBox="0 0 24 24" fill="#FFB300"><path d="M9.5 9l-1 6h1.5l.3-2h1.4l.3 2H13.5l-1-6zM11 11.5l.2-1.5h.5l.2 1.5zM14.5 9l-1 6H15l.6-4 .7 4h1.5l-1-6zM5.5 9l-1 4-.4-4H2.5l1 6H5l1.5-6z"/></svg></div>
+      <div class="pm-name">VISA CARD</div><div class="pm-detail">Bientôt</div>
+    </div>
+    <div class="pay-method" onclick="showToast('Mastercard — Bientôt!')">
+      <div class="pm-logo"><svg width="40" height="40" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="12" r="6" fill="#FF3860" opacity=".8"/><circle cx="15" cy="12" r="6" fill="#FFB300" opacity=".8"/></svg></div>
+      <div class="pm-name">MASTERCARD</div><div class="pm-detail">Bientôt</div>
+    </div>
+  </div>
+  <div class="wa-block reveal">
+    <div style="font-size:2.5rem;margin-bottom:14px">💬</div>
+    <h3>KONFIME PÈMAN SOU WHATSAPP</h3>
+    <p>Apre ou fin peye, voye konfirmasyon dirèkteman — nou aktive abònman ou an mwens de 5 minit.</p>
+    <a href="https://wa.me/19043181164?text=Bonjou!%20Mwen%20fin%20peye%20pou%20abonnman%20G.L%20Tikomik%20Studio!" target="_blank" class="wa-btn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      +1 (904) 318-1164 — KONFIME PÈMAN
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="ft-brand">
+      <div class="logo">G.L TIKOMIK STUDIO</div>
+      <p>Platfòm AI #1 pou kreye Tikomik animées 3D an Kreyòl Ayisyen. Vwa fi ak gason. Kreye, animate, telechaje.</p>
+    </div>
+    <div class="ft-col"><h5>Platfòm</h5><ul><li><a href="#studio">Studio AI</a></li><li><a href="#characters">Pèsonaj 3D</a></li><li><a href="#features">Fonksyon</a></li></ul></div>
+    <div class="ft-col"><h5>Abònman</h5><ul><li><a href="#plans">Plan Limité $20</a></li><li><a href="#plans">Plan Illimité $50</a></li><li><a href="#payment">Metòd Pèman</a></li></ul></div>
+    <div class="ft-col"><h5>Sipò</h5><ul><li><a href="https://wa.me/19043181164" target="_blank">WhatsApp</a></li><li><a href="mailto:G-legacy@gmail.com">Email</a></li><li><a href="#payment">Konfime Pèman</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 G.L Tikomik Studio — Tout dwa rezève.</p>
+    <p>Made with ❤ pou Ayiti 🇭🇹</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ════════════════════════════════════════
+   3D CHARACTER SVG GENERATOR
+   ════════════════════════════════════════ */
+let _uid = 0;
+
+const CHARS = [
+  { id:'biz', name:'Businessman', type:'CEO / Direktè', accentColor:'#00B4FF', gender:'male',
+    skin:['#FFCBA4','#E89A6A','#C07048'], hair:'#2C1810',
+    body:['#2A4A8A','#0E2040'], accent:'#00B4FF', shirt:'rgba(240,246,255,0.93)', outfitType:'suit' },
+  { id:'ceo', name:'Fanm CEO', type:'Direktris', accentColor:'#C084FC', gender:'female',
+    skin:['#FDBF94','#E89060','#C06838'], hair:'#5A1A06',
+    body:['#6D28D9','#2D0A6A'], accent:'#C084FC', shirt:'rgba(255,235,255,0.9)', outfitType:'dress', hairLong:true },
+  { id:'gam', name:'Gamer Pro', type:'Streamer', accentColor:'#00D97E', gender:'male',
+    skin:['#D4A878','#B88048','#905830'], hair:'#0A0808',
+    body:['#0D3A1A','#041408'], accent:'#00D97E', shirt:null, outfitType:'hoodie' },
+  { id:'pod', name:'Podcaster', type:'Estidyo', accentColor:'#FFB300', gender:'male',
+    skin:['#EAC09A','#CA9068','#A07048'], hair:'#3A2008',
+    body:['#3A2808','#1A1204'], accent:'#FFB300', shirt:'rgba(255,245,210,0.88)', outfitType:'casual' },
+  { id:'stu', name:'Etudyan', type:'Klas Modèn', accentColor:'#60A5FA', gender:'male',
+    skin:['#DCBA90','#BC9A70','#9C7A50'], hair:'#2A1A02',
+    body:['#1E3A6E','#0A1A3C'], accent:'#60A5FA', shirt:null, outfitType:'hoodie' },
+  { id:'her', name:'Superhéros', type:'Comic Premium', accentColor:'#F97316', gender:'male',
+    skin:['#D49060','#B47040','#944830'], hair:'#1C0028',
+    body:['#7C1090','#3A0850'], accent:'#F97316', shirt:null, outfitType:'hero' },
+  { id:'str', name:'Streamer Fi', type:'Gaming Room', accentColor:'#A855F7', gender:'female',
+    skin:['#F5C4A8','#DFA080','#BF7858'], hair:'#7C14CC',
+    body:['#2A1050','#100028'], accent:'#A855F7', shirt:null, outfitType:'gaming', hairLong:true },
+  { id:'bot', name:'Robot AI', type:'Futuristik', accentColor:'#00E5FF', gender:'male',
+    skin:['#4A7A9A','#2A4A6A','#0A2A4A'], hair:null,
+    body:['#1A3A5A','#0A1A2A'], accent:'#00E5FF', shirt:null, outfitType:'robot' },
+];
+
+const SCENES = [
+  { name:'Biwo Modèn', sky:'linear-gradient(180deg,#030B1A 0%,#071628 100%)', color:'#071628' },
+  { name:'Podcast Studio', sky:'linear-gradient(180deg,#1A0A24 0%,#0A0414 100%)', color:'#0A0414' },
+  { name:'Gaming Room', sky:'linear-gradient(180deg,#0A1A08 0%,#04100A 100%)', color:'#041008' },
+  { name:'Kafé Modèn', sky:'linear-gradient(180deg,#1A1006 0%,#0E0A04 100%)', color:'#0E0A04' },
+  { name:'Vil Lannuit', sky:'linear-gradient(180deg,#080E1E 0%,#04081C 100%)', color:'#04081C' },
+  { name:'Scène Konsè', sky:'linear-gradient(180deg,#180A10 0%,#0E0408 100%)', color:'#0E0408' },
+];
+
+/* Build body shapes */
+function suitBody(u, c) {
+  return `
+<rect x="40" y="140" width="16" height="52" rx="7" fill="${c.body[1]}"/>
+<rect x="64" y="140" width="16" height="52" rx="7" fill="${c.body[1]}"/>
+<ellipse cx="50" cy="191" rx="14" ry="6" fill="#060C18"/><ellipse cx="72" cy="191" rx="14" ry="6" fill="#060C18"/>
+<ellipse cx="46" cy="189" rx="6" ry="2.5" fill="rgba(255,255,255,0.07)"/><ellipse cx="68" cy="189" rx="6" ry="2.5" fill="rgba(255,255,255,0.07)"/>
+<rect x="27" y="81" width="66" height="63" rx="10" fill="url(#bd${u})"/>
+<rect x="27" y="81" width="24" height="40" rx="7" fill="rgba(255,255,255,0.05)"/>
+<rect x="50" y="81" width="20" height="55" rx="3" fill="${c.shirt}"/>
+<polygon points="60,89 55,120 65,120" fill="${c.accent}" opacity="0.88"/>
+<path d="M50 81 L27 108 L50 140Z" fill="${c.body[1]}" opacity="0.65"/>
+<path d="M70 81 L93 108 L70 140Z" fill="${c.body[1]}" opacity="0.65"/>
+<rect x="9" y="85" width="20" height="56" rx="8" fill="url(#bd${u})"/>
+<rect x="91" y="85" width="20" height="56" rx="8" fill="url(#bd${u})"/>
+<rect x="10" y="87" width="5" height="28" rx="2" fill="rgba(255,255,255,0.09)"/>
+<rect x="105" y="87" width="5" height="28" rx="2" fill="rgba(255,255,255,0.09)"/>
+<ellipse cx="19" cy="143" rx="10" ry="8" fill="url(#sk${u})"/>
+<ellipse cx="101" cy="143" rx="10" ry="8" fill="url(#sk${u})"/>`;
+}
+
+function dressBody(u, c) {
+  return `
+<rect x="41" y="150" width="14" height="42" rx="6" fill="url(#sk${u})"/>
+<rect x="65" y="150" width="14" height="42" rx="6" fill="url(#sk${u})"/>
+<ellipse cx="49" cy="192" rx="12" ry="5" fill="${c.body[1]}"/><ellipse cx="73" cy="192" rx="12" ry="5" fill="${c.body[1]}"/>
+<path d="M28 81 Q24 115 22 153 Q40 160 60 160 Q80 160 98 153 Q96 115 92 81Z" fill="url(#bd${u})"/>
+<path d="M29 83 Q26 115 24 148 Q36 144 44 146 Q38 112 38 83Z" fill="rgba(255,255,255,0.06)"/>
+<rect x="9" y="83" width="19" height="52" rx="8" fill="url(#bd${u})"/>
+<rect x="92" y="83" width="19" height="52" rx="8" fill="url(#bd${u})"/>
+<ellipse cx="18" cy="137" rx="9" ry="8" fill="url(#sk${u})"/><ellipse cx="101" cy="137" rx="9" ry="8" fill="url(#sk${u})"/>`;
+}
+
+function hoodieBody(u, c) {
+  return `
+<rect x="40" y="138" width="17" height="54" rx="7" fill="${c.body[1]}"/>
+<rect x="63" y="138" width="17" height="54" rx="7" fill="${c.body[1]}"/>
+<ellipse cx="51" cy="192" rx="16" ry="6" fill="#0A0A18"/><ellipse cx="71" cy="192" rx="16" ry="6" fill="#0A0A18"/>
+<rect x="36" y="185" width="30" height="8" rx="4" fill="#141428" opacity="0.8"/><rect x="58" y="185" width="30" height="8" rx="4" fill="#141428" opacity="0.8"/>
+<rect x="26" y="80" width="68" height="62" rx="12" fill="url(#bd${u})"/>
+<path d="M40 120 Q60 127 80 120 L78 138 Q60 143 42 138Z" fill="${c.body[1]}" opacity="0.55"/>
+<line x1="60" y1="80" x2="60" y2="142" stroke="${c.body[1]}" stroke-width="2" opacity="0.35"/>
+<rect x="8" y="84" width="20" height="54" rx="9" fill="url(#bd${u})"/><rect x="92" y="84" width="20" height="54" rx="9" fill="url(#bd${u})"/>
+<ellipse cx="18" cy="140" rx="10" ry="8" fill="url(#sk${u})"/><ellipse cx="102" cy="140" rx="10" ry="8" fill="url(#sk${u})"/>`;
+}
+
+function heroBody(u, c) {
+  return `
+<path d="M28 82 Q2 122 8 180 Q30 162 60 167 Q90 162 112 180 Q118 122 92 82Z" fill="${c.body[1]}" opacity="0.7"/>
+<path d="M28 82 Q8 120 14 175 Q32 160 60 164Z" fill="${c.body[0]}" opacity="0.3"/>
+<rect x="40" y="140" width="17" height="52" rx="7" fill="${c.body[1]}"/>
+<rect x="63" y="140" width="17" height="52" rx="7" fill="${c.body[1]}"/>
+<rect x="36" y="178" width="26" height="16" rx="5" fill="${c.body[1]}"/><rect x="58" y="178" width="26" height="16" rx="5" fill="${c.body[1]}"/>
+<rect x="27" y="82" width="66" height="62" rx="10" fill="url(#bd${u})"/>
+<circle cx="60" cy="100" r="13" stroke="${c.accent}" stroke-width="2" fill="none" opacity="0.5"/>
+<polygon points="60,91 56,107 64,107" fill="${c.accent}" opacity="0.9"/>
+<rect x="8" y="86" width="21" height="54" rx="9" fill="url(#bd${u})"/><rect x="91" y="86" width="21" height="54" rx="9" fill="url(#bd${u})"/>
+<ellipse cx="19" cy="142" rx="11" ry="9" fill="${c.body[0]}"/><ellipse cx="101" cy="142" rx="11" ry="9" fill="${c.body[0]}"/>`;
+}
+
+function gamingBody(u, c) {
+  return `
+<rect x="40" y="137" width="18" height="55" rx="7" fill="#1A2848"/>
+<rect x="62" y="137" width="18" height="55" rx="7" fill="#1A2848"/>
+<ellipse cx="52" cy="192" rx="17" ry="6" fill="#08000E"/><ellipse cx="70" cy="192" rx="17" ry="6" fill="#08000E"/>
+<rect x="26" y="79" width="68" height="62" rx="12" fill="url(#bd${u})"/>
+<path d="M26 93 L94 93" stroke="${c.accent}" stroke-width="1.5" opacity="0.35"/>
+<rect x="8" y="83" width="20" height="54" rx="9" fill="url(#bd${u})"/><rect x="92" y="83" width="20" height="54" rx="9" fill="url(#bd${u})"/>
+<ellipse cx="18" cy="140" rx="10" ry="8" fill="url(#sk${u})"/><ellipse cx="102" cy="140" rx="10" ry="8" fill="url(#sk${u})"/>`;
+}
+
+function casualBody(u, c) {
+  return `
+<rect x="41" y="140" width="16" height="52" rx="7" fill="${c.body[1]}"/>
+<rect x="63" y="140" width="16" height="52" rx="7" fill="${c.body[1]}"/>
+<ellipse cx="50" cy="191" rx="13" ry="5.5" fill="#060C18"/><ellipse cx="72" cy="191" rx="13" ry="5.5" fill="#060C18"/>
+<rect x="28" y="81" width="64" height="62" rx="10" fill="url(#bd${u})"/>
+<rect x="28" y="82" width="22" height="38" rx="7" fill="rgba(255,255,255,0.05)"/>
+<rect x="49" y="81" width="22" height="54" rx="3" fill="${c.shirt}"/>
+<rect x="9" y="85" width="20" height="54" rx="8" fill="url(#bd${u})"/><rect x="91" y="85" width="20" height="54" rx="8" fill="url(#bd${u})"/>
+<ellipse cx="19" cy="141" rx="10" ry="8" fill="url(#sk${u})"/><ellipse cx="101" cy="141" rx="10" ry="8" fill="url(#sk${u})"/>`;
+}
+
+function robotBody(u, c) {
+  return `
+<rect x="40" y="137" width="18" height="55" rx="4" fill="url(#mt${u})"/>
+<rect x="62" y="137" width="18" height="55" rx="4" fill="url(#mt${u})"/>
+<rect x="36" y="185" width="28" height="11" rx="3" fill="#06101A"/><rect x="58" y="185" width="28" height="11" rx="3" fill="#06101A"/>
+<rect x="25" y="79" width="70" height="62" rx="6" fill="url(#mt${u})"/>
+<rect x="35" y="89" width="50" height="32" rx="4" fill="#08141E" opacity="0.85"/>
+<circle cx="46" cy="103" r="6" fill="${c.accent}" opacity="0.9"/><circle cx="60" cy="103" r="6" fill="${c.accent}" opacity="0.7"/><circle cx="74" cy="103" r="6" fill="${c.accent}" opacity="0.9"/>
+<circle cx="46" cy="103" r="3" fill="white" opacity="0.4"/><circle cx="60" cy="103" r="3" fill="white" opacity="0.3"/><circle cx="74" cy="103" r="3" fill="white" opacity="0.4"/>
+<rect x="8" y="81" width="19" height="55" rx="5" fill="url(#mt${u})"/><rect x="93" y="81" width="19" height="55" rx="5" fill="url(#mt${u})"/>
+<rect x="8" y="108" width="19" height="6" rx="2" fill="#04101A" opacity="0.5"/><rect x="93" y="108" width="19" height="6" rx="2" fill="#04101A" opacity="0.5"/>
+<rect x="7" y="135" width="21" height="11" rx="4" fill="url(#mt${u})"/><rect x="92" y="135" width="21" height="11" rx="4" fill="url(#mt${u})"/>
+<!-- Robot head (replaces normal head) -->
+<rect x="27" y="10" width="66" height="54" rx="8" fill="url(#mt${u})"/>
+<rect x="29" y="12" width="22" height="22" rx="4" fill="rgba(255,255,255,0.1)"/>
+<rect x="46" y="62" width="28" height="19" rx="4" fill="url(#mt${u})"/>
+<rect x="32" y="20" width="22" height="16" rx="5" fill="#080C14"/><rect x="66" y="20" width="22" height="16" rx="5" fill="#080C14"/>
+<rect x="34" y="22" width="18" height="12" rx="3" fill="${c.accent}" opacity="0.75"/><rect x="68" y="22" width="18" height="12" rx="3" fill="${c.accent}" opacity="0.75"/>
+<rect x="35" y="23" width="7" height="5" rx="2" fill="white" opacity="0.45"/><rect x="69" y="23" width="7" height="5" rx="2" fill="white" opacity="0.45"/>
+<rect x="37" y="46" width="46" height="10" rx="3" fill="#080C14"/>
+<rect x="39" y="48" width="7" height="6" rx="1" fill="${c.accent}" opacity="0.85"/>
+<rect x="48" y="48" width="7" height="6" rx="1" fill="${c.accent}" opacity="0.65"/>
+<rect x="57" y="48" width="7" height="6" rx="1" fill="${c.accent}" opacity="0.85"/>
+<rect x="66" y="48" width="7" height="6" rx="1" fill="${c.accent}" opacity="0.65"/>
+<line x1="60" y1="10" x2="60" y2="2" stroke="${c.accent}" stroke-width="2.5"/>
+<circle cx="60" cy="2" r="3.5" fill="${c.accent}"/>`;
+}
+
+function genHair(c, isLong) {
+  if (!c.hair) return '';
+  const base = `<path d="M31 36 Q34 7 60 5 Q86 7 89 36 Q78 17 60 19 Q42 17 31 36Z" fill="${c.hair}"/>`;
+  if (!isLong) return base;
+  return base +
+    `<path d="M30 36 Q23 72 26 102" stroke="${c.hair}" stroke-width="9" stroke-linecap="round" fill="none" opacity="0.82"/>` +
+    `<path d="M90 36 Q97 72 94 102" stroke="${c.hair}" stroke-width="9" stroke-linecap="round" fill="none" opacity="0.82"/>` +
+    `<path d="M30 36 Q18 65 20 90" stroke="${c.hair}" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.5"/>`;
+}
+
+function gen3DChar(c, w, h) {
+  const u = 'u' + (++_uid);
+  const isRobot = c.outfitType === 'robot';
+
+  let body = '';
+  switch (c.outfitType) {
+    case 'suit': body = suitBody(u, c); break;
+    case 'dress': body = dressBody(u, c); break;
+    case 'hoodie': body = hoodieBody(u, c); break;
+    case 'hero': body = heroBody(u, c); break;
+    case 'gaming': body = gamingBody(u, c); break;
+    case 'casual': body = casualBody(u, c); break;
+    case 'robot': body = robotBody(u, c); break;
+    default: body = suitBody(u, c);
+  }
+
+  const head = isRobot ? '' : `
+<!-- Neck -->
+<rect x="50" y="64" width="20" height="22" rx="8" fill="url(#sk${u})"/>
+<!-- Head 3D sphere -->
+<ellipse cx="60" cy="46" rx="30" ry="33" fill="url(#sk${u})"/>
+<!-- Head 3D highlight -->
+<ellipse cx="44" cy="33" rx="14" ry="11" fill="rgba(255,255,255,0.22)" transform="rotate(-26 44 33)"/>
+<!-- Hair -->
+${genHair(c, c.hairLong)}
+<!-- Ears -->
+<ellipse cx="30" cy="46" rx="6" ry="8.5" fill="url(#sk${u})"/>
+<ellipse cx="90" cy="46" rx="6" ry="8.5" fill="url(#sk${u})"/>
+<ellipse cx="30" cy="46" rx="3" ry="5.5" fill="${c.skin[2]}" opacity="0.3"/>
+<ellipse cx="90" cy="46" rx="3" ry="5.5" fill="${c.skin[2]}" opacity="0.3"/>
+<!-- Eye whites -->
+<ellipse cx="47" cy="44" rx="7.5" ry="8.5" fill="url(#ew${u})"/>
+<ellipse cx="73" cy="44" rx="7.5" ry="8.5" fill="url(#ew${u})"/>
+<!-- Iris -->
+<ellipse cx="48" cy="45" rx="4.5" ry="5" fill="${c.id==='str'?'#3C0068':c.id==='gam'?'#003A18':'#2A1A0A'}"/>
+<ellipse cx="74" cy="45" rx="4.5" ry="5" fill="${c.id==='str'?'#3C0068':c.id==='gam'?'#003A18':'#2A1A0A'}"/>
+<!-- Pupil -->
+<ellipse cx="48" cy="45" rx="2.5" ry="3" fill="rgba(0,0,0,0.92)"/>
+<ellipse cx="74" cy="45" rx="2.5" ry="3" fill="rgba(0,0,0,0.92)"/>
+<!-- Eye specular (3D effect) -->
+<circle cx="46" cy="43" r="1.8" fill="white" opacity="0.88"/>
+<circle cx="72" cy="43" r="1.8" fill="white" opacity="0.88"/>
+<!-- Eyebrows -->
+<path d="M40 35 Q47 30 55 33" stroke="${c.hair||'#2A1A0A'}" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+<path d="M65 33 Q73 30 80 35" stroke="${c.hair||'#2A1A0A'}" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+<!-- Nose hint -->
+<path d="M57 53 Q60 58 63 53" stroke="${c.skin[2]}" stroke-width="1.3" fill="none" stroke-linecap="round" opacity="0.45"/>
+<!-- Mouth (animated by JS) -->
+<path class="char-mouth" d="M51 63 Q60 70 69 63" stroke="${c.skin[2]}" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+`;
+
+  const metalGrad = isRobot ? `
+  <linearGradient id="mt${u}" x1="20%" y1="0%" x2="80%" y2="100%">
+    <stop offset="0%" stop-color="#4A7A9A"/>
+    <stop offset="50%" stop-color="#2A4A6A"/>
+    <stop offset="100%" stop-color="#0A2A4A"/>
+  </linearGradient>` : '';
+
+  return `<svg width="${w}" height="${h}" viewBox="0 0 120 200" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <radialGradient id="sk${u}" cx="36%" cy="30%" r="70%">
+    <stop offset="0%" stop-color="${c.skin[0]}"/>
+    <stop offset="55%" stop-color="${c.skin[1]}"/>
+    <stop offset="100%" stop-color="${c.skin[2]}"/>
+  </radialGradient>
+  <linearGradient id="bd${u}" x1="12%" y1="0%" x2="88%" y2="100%">
+    <stop offset="0%" stop-color="${c.body[0]}"/>
+    <stop offset="100%" stop-color="${c.body[1]}"/>
+  </linearGradient>
+  <radialGradient id="ew${u}" cx="28%" cy="25%" r="72%">
+    <stop offset="0%" stop-color="white"/>
+    <stop offset="100%" stop-color="#c8d8ee"/>
+  </radialGradient>
+  ${metalGrad}
+</defs>
+<!-- Ground shadow -->
+<ellipse cx="60" cy="197" rx="27" ry="5" fill="rgba(0,0,0,0.3)"/>
+${body}
+${head}
+</svg>`;
+}
+
+/* ════════════════════════════════════════
+   VOICE ENGINE (Web Speech API)
+   ════════════════════════════════════════ */
+const VoiceEngine = {
+  voices: [],
+  gender: 'male',   // 'male' | 'female' | 'robot'
+  lang: 'ht',       // 'ht' | 'fr' | 'en'
+
+  init() {
+    if (!window.speechSynthesis) return;
+    const load = () => { this.voices = speechSynthesis.getVoices(); };
+    speechSynthesis.addEventListener('voiceschanged', load);
+    load();
+    setTimeout(load, 500); // some browsers delay
+  },
+
+  getBestVoice() {
+    const { gender, lang } = this;
+    if (!this.voices.length) return null;
+    const tts_lang = (lang === 'en') ? 'en' : 'fr';
+    let pool = this.voices.filter(v => v.lang.toLowerCase().startsWith(tts_lang));
+    if (!pool.length) pool = this.voices;
+
+    const fem = /female|woman|fiona|victoria|samantha|karen|moira|amélie|amelie|zira|hazel|susan|sarah|anna|eva|ava|alice|julie|lea|marie/i;
+    const mal = /male|man|david|james|daniel|fred|thomas|alex|jorge|pierre|paul/i;
+
+    if (gender === 'female') {
+      return pool.find(v => fem.test(v.name))
+          || pool.find(v => !mal.test(v.name) && v.name !== pool[0]?.name)
+          || pool[0];
+    } else if (gender === 'robot') {
+      return pool.find(v => /google|espeak|robot/i.test(v.name)) || pool[0];
+    } else {
+      return pool.find(v => mal.test(v.name))
+          || pool[0];
+    }
+  },
+
+  speak(text) {
+    if (!window.speechSynthesis) { showToast('TTS pa disponib sou navigatè sa a'); return; }
+    if (!text.trim()) { showToast('Ekri yon tèks dabò!'); return; }
+    speechSynthesis.cancel();
+
+    const utter = new SpeechSynthesisUtterance(text);
+    const v = this.getBestVoice();
+    if (v) utter.voice = v;
+
+    if (this.gender === 'robot') {
+      utter.pitch = 0.45; utter.rate = 1.1;
+      utter.lang = 'en-US';
+    } else if (this.gender === 'female') {
+      utter.pitch = 1.38; utter.rate = 0.93;
+      utter.lang = this.lang === 'en' ? 'en-US' : 'fr-FR';
+    } else {
+      utter.pitch = 0.82; utter.rate = 0.9;
+      utter.lang = this.lang === 'en' ? 'en-US' : 'fr-FR';
+    }
+
+    utter.onstart  = () => startMouthAnim();
+    utter.onend    = () => stopMouthAnim();
+    utter.onerror  = () => stopMouthAnim();
+    speechSynthesis.speak(utter);
+  },
+
+  stop() {
+    if (window.speechSynthesis) speechSynthesis.cancel();
+    stopMouthAnim();
+  }
+};
+
+/* ════════════════════════════════════════
+   MOUTH ANIMATION
+   ════════════════════════════════════════ */
+let _mouthInterval = null;
+let _mouthOpen = false;
+
+function startMouthAnim() {
+  const charEl = document.getElementById('cvChar');
+  if (charEl) charEl.classList.add('is-speaking');
+  // Update wave UI
+  document.getElementById('waveDisplay')?.classList.add('playing');
+  updateVoiceStatus(true);
+
+  _mouthInterval = setInterval(() => {
+    _mouthOpen = !_mouthOpen;
+    const svg = document.querySelector('#cvChar svg');
+    if (!svg) return;
+    svg.querySelectorAll('.char-mouth').forEach(m => {
+      if (_mouthOpen) {
+        m.setAttribute('d', 'M51 63 Q60 77 69 63 Q60 68 51 63Z');
+        m.setAttribute('fill', 'rgba(50,8,4,0.78)');
+      } else {
+        m.setAttribute('d', 'M51 63 Q60 70 69 63');
+        m.setAttribute('fill', 'none');
+      }
+    });
+    // Also animate hero preview
+    const heroSvg = document.querySelector('#heroPreviewChar svg');
+    if (heroSvg) heroSvg.querySelectorAll('.char-mouth').forEach(m => {
+      m.setAttribute('d', _mouthOpen ? 'M51 63 Q60 77 69 63 Q60 68 51 63Z' : 'M51 63 Q60 70 69 63');
+      m.setAttribute('fill', _mouthOpen ? 'rgba(50,8,4,0.78)' : 'none');
+    });
+  }, 180);
+}
+
+function stopMouthAnim() {
+  clearInterval(_mouthInterval);
+  _mouthOpen = false;
+  document.getElementById('cvChar')?.classList.remove('is-speaking');
+  document.getElementById('waveDisplay')?.classList.remove('playing');
+  updateVoiceStatus(false);
+
+  const svg = document.querySelector('#cvChar svg');
+  if (svg) svg.querySelectorAll('.char-mouth').forEach(m => {
+    m.setAttribute('d', 'M51 63 Q60 70 69 63');
+    m.setAttribute('fill', 'none');
+  });
+}
+
+function updateVoiceStatus(speaking) {
+  const bar = document.getElementById('voiceStatusBar');
+  if (!bar) return;
+  const colors = { male:'#00B4FF', female:'#FF6EB4', robot:'#00E5FF' };
+  const col = colors[VoiceEngine.gender] || '#00B4FF';
+  const labels = { male:'GASON', female:'FANM', robot:'ROBOT FX' };
+  const dot = bar.querySelector('.hud-dot');
+  bar.style.color = col;
+  if (dot) dot.style.background = col;
+  bar.childNodes.forEach(n => { if (n.nodeType === 3) n.textContent = speaking ? '🎤 AP PALE' : ('VWA ' + (labels[VoiceEngine.gender]||'')); });
+}
+
+/* ════════════════════════════════════════
+   VOICE UI CONTROLS
+   ════════════════════════════════════════ */
+function setVoiceGender(g, btn) {
+  VoiceEngine.gender = g;
+  ['vbMale','vbFemale','vbRobot'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.className = 'vg-btn';
+  });
+  const classMap = { male:'active-male', female:'active-female', robot:'active-robot' };
+  if (btn) btn.className = 'vg-btn ' + (classMap[g] || '');
+
+  const labels = {
+    male:'GASON KRY', female:'FANM KRY', robot:'ROBOT FX'
+  };
+  if (VoiceEngine.lang === 'fr') { labels.male='GASON FRA'; labels.female='FANM FRA'; }
+  if (VoiceEngine.lang === 'en') { labels.male='MALE ENG'; labels.female='FEMALE ENG'; }
+  const lbl = document.getElementById('voiceLabel');
+  if (lbl) lbl.textContent = labels[g] || g.toUpperCase();
+
+  const wv = document.getElementById('waveDisplay');
+  const colors = { male:'#00B4FF', female:'#FF6EB4', robot:'#00E5FF' };
+  if (wv) wv.querySelectorAll('span').forEach(s => s.style.background = colors[g] || '#00B4FF');
+
+  updateVoiceStatus(false);
+  showToast('Vwa: ' + (labels[g] || g));
+}
+
+function setLang(btn, lang) {
+  VoiceEngine.lang = lang;
+  document.querySelectorAll('.lt-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const names = { ht:'KREYÒL', fr:'FRANÇAIS', en:'ENGLISH' };
+  showToast('Lang: ' + names[lang]);
+}
+
+function doSpeak() {
+  const txt = document.getElementById('userTxt')?.value || '';
+  VoiceEngine.speak(txt);
+}
+
+function doStop() {
+  VoiceEngine.stop();
+  showToast('⏹ Kanpe');
+}
+
+/* ════════════════════════════════════════
+   BUILD UI
+   ════════════════════════════════════════ */
+let currentCharIdx = 0;
+
+function buildCharList() {
+  const list = document.getElementById('charList');
+  if (!list) return;
+  CHARS.forEach((c, i) => {
+    const el = document.createElement('div');
+    el.className = 'char-item' + (i === 0 ? ' active' : '');
+    el.innerHTML = `<div class="char-avatar" style="border-color:${c.accentColor}40">${gen3DChar(c, 32, 52)}</div>
+      <div><div class="char-name">${c.name}</div><div class="char-type">${c.type}</div></div>`;
+    el.onclick = () => {
+      document.querySelectorAll('.char-item').forEach(x => x.classList.remove('active'));
+      el.classList.add('active');
+      currentCharIdx = i;
+      loadCharToCanvas(c);
+      showToast('✓ ' + c.name);
+    };
+    list.appendChild(el);
+  });
+}
+
+function loadCharToCanvas(c) {
+  const el = document.getElementById('cvChar');
+  if (!el) return;
+  VoiceEngine.stop();
+  el.innerHTML = gen3DChar(c, 150, 240);
+  // Update gender default from char
+  const g = c.gender || 'male';
+  const btnId = g === 'female' ? 'vbFemale' : 'vbMale';
+  setVoiceGender(g, document.getElementById(btnId));
+}
+
+function buildSceneList() {
+  const list = document.getElementById('sceneList');
+  if (!list) return;
+  SCENES.forEach((s, i) => {
+    const el = document.createElement('div');
+    el.className = 'scene-mini' + (i === 0 ? ' active' : '');
+    el.innerHTML = `<div class="scene-thumb" style="background:${s.color}"></div>${s.name}`;
+    el.onclick = () => {
+      document.querySelectorAll('.scene-mini').forEach(x => x.classList.remove('active'));
+      el.classList.add('active');
+      const sky = document.getElementById('cvSky');
+      if (sky) sky.style.background = s.sky;
+      showToast('Scèn: ' + s.name);
+    };
+    list.appendChild(el);
+  });
+}
+
+function buildGallery() {
+  const gal = document.getElementById('charGallery');
+  if (!gal) return;
+  CHARS.forEach(c => {
+    const el = document.createElement('div');
+    el.className = 'char-gallery-card';
+    el.innerHTML = `
+      <div class="cgc-preview">
+        <div class="cgc-bg"></div>
+        <div class="cgc-glow" style="background:${c.accentColor}30"></div>
+        <div class="cgc-char">${gen3DChar(c, 70, 115)}</div>
+      </div>
+      <div class="cgc-info">
+        <div class="cgc-name">${c.name}</div>
+        <div class="cgc-type">${c.type}</div>
+        <span class="cgc-badge" style="color:${c.accentColor};border-color:${c.accentColor}40;background:${c.accentColor}12">3D HD</span>
+      </div>`;
+    el.onclick = () => showToast(c.name + ' — Plan premye!');
+    gal.appendChild(el);
+  });
+}
+
+/* Speech preview bubble */
+function updateSpeechPreview() {
+  const txt = document.getElementById('userTxt')?.value || '';
+  const span = document.getElementById('speechText');
+  const placeholder = document.getElementById('speechPlaceholder');
+  if (!span || !placeholder) return;
+  if (txt.trim()) {
+    placeholder.style.display = 'none';
+    span.style.display = 'block';
+    span.textContent = txt.substring(0, 60) + (txt.length > 60 ? '…' : '');
+  } else {
+    placeholder.style.display = 'block';
+    span.style.display = 'none';
+  }
+}
+
+/* ════════════════════════════════════════
+   STUDIO ACTIONS
+   ════════════════════════════════════════ */
+function playAnim() {
+  const c = document.getElementById('cvChar');
+  if (c) { c.style.animation = 'none'; setTimeout(() => c.style.animation = 'cvBob 3s ease-in-out infinite', 50); }
+  showToast('▶ Animasyon relanse!');
+}
+
+function generateVideo() {
+  VoiceEngine.stop();
+  const txt = document.getElementById('userTxt')?.value || '';
+  showToast('✨ AI ap jenere vidéo...');
+  let w = 0;
+  const fill = document.getElementById('genFill');
+  const iv = setInterval(() => {
+    w += 2.5;
+    if (fill) fill.style.width = w + '%';
+    if (w >= 100) {
+      clearInterval(iv);
+      // Speak the text when "video" is done
+      setTimeout(() => {
+        showToast('✅ Vidéo prè! Pèsonaj ap pale...');
+        if (txt.trim()) VoiceEngine.speak(txt);
+      }, 300);
+      setTimeout(() => { if (fill) fill.style.width = '0%'; }, 5000);
+    }
+  }, 60);
+}
+
+function selectPlan(p) { showToast('Plan ' + p + ' chwazi!'); setTimeout(() => goto('#payment'), 1400); }
+function copyTxt(txt, msg) { navigator.clipboard.writeText(txt).then(() => showToast('✓ ' + msg)).catch(() => showToast(msg + ': ' + txt)); }
+
+function downloadDemo() {
+  showToast('⬇ Telechaje kòmanse!');
+  const c = CHARS[currentCharIdx];
+  const txt = document.getElementById('userTxt')?.value || '';
+  const content = `G.L TIKOMIK STUDIO v2.0\n${'='.repeat(30)}\nPèsonaj: ${c.name} (${c.type})\nVwa: ${VoiceEngine.gender === 'female' ? 'Fanm' : VoiceEngine.gender === 'robot' ? 'Robot FX' : 'Gason'}\nLang: ${VoiceEngine.lang.toUpperCase()}\nTèks: ${txt || '(Okenn tèks)'}\nFormat: MP4 HD 1080p\nDate: ${new Date().toLocaleDateString()}\n\nMèsi pou itilize G.L Tikomik Studio!\nWhatsApp: +1 (904) 318-1164`;
+  const a = document.createElement('a');
+  a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(content);
+  a.download = 'GL_Tikomik_' + c.id + '.txt';
+  a.click();
+}
+
+function goto(sel) { document.querySelector(sel)?.scrollIntoView({ behavior: 'smooth' }); }
+function closeMob() { document.getElementById('mobMenu')?.classList.remove('open'); }
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._to);
+  t._to = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+/* ════════════════════════════════════════
+   LANG SYSTEM
+   ════════════════════════════════════════ */
+const LT = {
+  ht: { tag:'✦ PLATFÒM AI #1 POU TIKOMIK ANIMÉES', t1:'KREYE', t2:'TIKOMIK ANIMÉES', sub:'Chwazi pèsonaj 3D, ekri tèks, pèsonaj pale — vwa fi oubyen gason, an kreyòl, fransè oubyen anglè.', sTitle:'EDITÈ TIKOMIK PWOFESYONÈL', sSub:'Pèsonaj pale tèks ou — bouch anime, san tèks sou ekran.' },
+  fr: { tag:'✦ PLATEFORME AI #1 POUR TIKOMIK', t1:'CRÉEZ DES', t2:'TIKOMIK ANIMÉES', sub:'Choisissez un personnage 3D, écrivez votre texte — voix féminine ou masculine, en créole, français ou anglais.', sTitle:'ÉDITEUR TIKOMIK PROFESSIONNEL', sSub:'Le personnage parle votre texte — bouche animée, sans texte à l\'écran.' },
+  en: { tag:'✦ #1 AI PLATFORM FOR ANIMATED COMICS', t1:'CREATE', t2:'ANIMATED COMICS', sub:'Choose a 3D character, write text — female or male voice, in Creole, French or English. Mouth animates to speech.', sTitle:'PROFESSIONAL TIKOMIK EDITOR', sSub:'Character speaks your text — mouth animates, no text on screen.' },
+};
+
+function chooseLang(l) {
+  document.getElementById('langModal').style.display = 'none';
+  const t = LT[l];
+  const htag = document.getElementById('htag');
+  const htitle = document.getElementById('htitle');
+  const hsub = document.getElementById('hsub');
+  const sTitle = document.getElementById('sTitle');
+  const sSub = document.getElementById('sSub');
+  if (htag) htag.textContent = t.tag;
+  if (htitle) htitle.innerHTML = t.t1 + '<br><em id="htitle2">' + t.t2 + '</em><br>AVÈK AI';
+  if (hsub) hsub.textContent = t.sub;
+  if (sTitle) sTitle.textContent = t.sTitle;
+  if (sSub) sSub.textContent = t.sSub;
+  VoiceEngine.lang = l === 'ht' ? 'ht' : l;
+}
+
+/* ════════════════════════════════════════
+   SCROLL REVEAL
+   ════════════════════════════════════════ */
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); } });
+}, { threshold: 0.07 });
+
+/* ════════════════════════════════════════
+   INIT
+   ════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  VoiceEngine.init();
+  buildCharList();
+  buildSceneList();
+  buildGallery();
+
+  // Load default char to canvas
+  loadCharToCanvas(CHARS[0]);
+  // Load hero preview
+  const hp = document.getElementById('heroPreviewChar');
+  if (hp) hp.innerHTML = gen3DChar(CHARS[0], 110, 175);
+
+  // Reveal observer
+  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+  // Initial speech preview
+  updateSpeechPreview();
+});
+</script>
+</body>
+</html>
